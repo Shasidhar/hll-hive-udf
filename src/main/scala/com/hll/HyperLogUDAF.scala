@@ -3,12 +3,14 @@ package com.hll
 import com.twitter.algebird.{Bytes, DenseHLL, HyperLogLog}
 import org.apache.hadoop.hive.ql.exec.{UDAF, UDAFEvaluator}
 import org.apache.hadoop.hive.ql.metadata.HiveException
+import org.apache.hadoop.hive.ql.udf.generic.GenericUDAFEvaluator
+
 import collection.JavaConverters._
 
 
 class HyperLogUDAF extends UDAF{
 
-  class HyperLogEvaluator() extends UDAFEvaluator {
+  object HyperLogEvaluator extends UDAFEvaluator {
 
     class Buffer{
       var count : java.util.List[java.lang.Byte] = _
@@ -16,8 +18,9 @@ class HyperLogUDAF extends UDAF{
     }
 
     var buffer : Buffer = _
+    init()
 
-     def init(): Unit = {
+    override  def init(): Unit = {
       buffer = new Buffer
     }
 
